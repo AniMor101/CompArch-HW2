@@ -1,0 +1,22 @@
+#!/bin/bash
+
+fails=0;
+i=0
+for (( c=0; c<=960; c++ ))
+do
+	
+  source tests/test$c.command | tail -n1  > tests/test$c.myout
+  if (( `diff tests/test$c.OURS  tests/test$c.myout | wc -l` == 0 )); then
+    i=0
+	
+  else
+    echo -e "\e[\n\n7mfailure  $c              -------"     `diff tests/test$c.out  tests/test$c.myout`
+	cat tests/test$c.command
+	((fails=fails+1))
+    
+  fi
+
+done
+
+echo -e "\e[7m <<< Fail-Rate: $fails/960 >>>"
+
